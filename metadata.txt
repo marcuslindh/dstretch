@@ -1,0 +1,18 @@
+[general]
+name=DStretch - decorrelation stretch
+qgisMinimumVersion=3.22
+description=Decorrelation stretch (NASA/JPL) of the map canvas or a raster layer. Magnifies small color differences and writes the result to a new layer.
+about=Implements the decorrelation stretch NASA's Jet Propulsion Laboratory developed for satellite imagery, and which DStretch (Jon Harman) uses to recover faded rock art. The covariance matrix of the color channels is diagonalized with the Karhunen-Loeve transform, each principal component is rescaled to equal variance, and the result is rotated back. Surfaces that look uniform - forest, water, bare rock, farmland - then reveal structure that is invisible in the original. The tool works on what is visible in the map canvas, previews in real time, and writes the result to a new georeferenced raster layer. Includes a Swedish translation. Based on the method described at https://spinoff.nasa.gov/Manipulating_Satellite_Photos_Now_Reveals_Ancient_Images
+version=1.1.0
+author=Marcus Lindh
+email=marcus.lindh@umea.se
+tracker=https://github.com/marcuslindh/dstretch/issues
+repository=https://github.com/marcuslindh/dstretch
+homepage=https://github.com/marcuslindh/dstretch
+category=Raster
+icon=icon.png
+experimental=False
+deprecated=False
+hasProcessingProvider=no
+changelog=1.1.0 - Presets with keyboard stepping, English source with Swedish translation.
+    1.0.0 - First version.

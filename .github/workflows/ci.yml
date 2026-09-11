@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install numpy
+
+      - name: Compile every source file
+        run: python -m compileall -q . -x 'build|\.git'
+
+      - name: Run the self test
+        run: python tools/selftest.py
+
+      - name: Verify the compiled translations are up to date
+        run: |
+          python tools/build_qm.py
+          if ! git diff --quiet -- i18n; then
+            echo "::error::i18n/*.qm is out of date. Run 'python tools/build_qm.py' and commit the result."
+            git diff --stat -- i18n
+            exit 1
+          fi
+
+      - name: Build the plugin package
+        run: python tools/build_zip.py
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: plugin-package
+          path: build/*.zip

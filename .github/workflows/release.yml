@@ -1,0 +1,35 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Check the tag matches metadata.txt
+        run: |
+          version=$(grep '^version=' metadata.txt | cut -d= -f2)
+          tag="${GITHUB_REF_NAME#v}"
+          if [ "$version" != "$tag" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match version=$version in metadata.txt"
+            exit 1
+          fi
+
+      - name: Build the plugin package
+        run: python tools/build_zip.py
+
+      - name: Publish the release
+        run: gh release create "$GITHUB_REF_NAME" build/*.zip --generate-notes
+        env:
+          GH_TOKEN: ${{ github.token }}

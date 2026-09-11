@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Build output
+/build/
+*.zip
+
+# Editors
+.vscode/
+.idea/
+*.swp
